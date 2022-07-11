@@ -11,7 +11,11 @@ export async function getItem(
     Key: {},
   };
 
-  getParams.Key[key] = { N: keyValue };
+  getParams.Key[key] = { S: keyValue };
+
+  console.log(
+    `[data/dynamodb/getItem] Retrieving item ${JSON.stringify(getParams)}`
+  );
 
   const data = await ddbClient.send(new GetItemCommand(getParams));
   console.log("Success", data.Item);

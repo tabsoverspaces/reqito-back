@@ -1,0 +1,75 @@
+frameworkVersion: '3'
+
+service: reqito-back
+
+plugins:
+  - serverless-plugin-typescript
+
+resources:
+  Resources:
+    UserPool:
+      Type: AWS::Cognito::UserPool
+      Properties:
+        UserPoolName: reqito-users-auth-pool
+        Schema:
+          - Name: email
+            Required: true
+            Mutable: true
+        Policies:
+          PasswordPolicy:
+            MinimumLength: 6
+        AutoVerifiedAttributes: ["email"]
+
+    UserClient:
+      Type: AWS::Cognito::UserPoolClient
+      Properties:
+        ClientName: reqito-backend
+        GenerateSecret: false
+        UserPoolId: { Ref: UserPool }
+        AccessTokenValidity: 5
+        IdTokenValidity: 5
+        ExplicitAuthFlows:
+          - "ALLOW_USER_PASSWORD_AUTH"
+          - "ALLOW_REFRESH_TOKEN_AUTH"
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  region: 'eu-west-2'
+  environment:
+    reqitoAuthUrl: "https://h5st66ond5.execute-api.eu-west-2.amazonaws.com/dev"
+  iam:
+    role:
+      statements:
+        - Effect: "Allow"
+          Resource: arn:aws:dynamodb:eu-west-2:229169632553:table/ReqitoUsers
+          Action: 'dynamodb:GetItem'
+        - Effect: "Allow"
+          Resource: arn:aws:dynamodb:eu-west-2:229169632553:table/ReqitoUsers
+          Action: 'dynamodb:PutItem'
+
+
+functions:
+# Users
+  createUser:
+    handler: handler.createUser
+    events:
+      - http:
+          path: createUser
+          method: post
+          cors: true
+          integration: lambda
+
+
+package:
+  patterns:
+    - '!.serverless/**'
+    - '!git_ignore'
+    - '!nyc_output/**'
+    - '!external-data/**'
+    - '!test/**'
+    - '!.eslintrc.js'
+    - '!.mocharc.json'
+    - '!.nycrc'
+    - '!.nyc_output/**'
+    - '!.git/**'
