@@ -35,7 +35,7 @@ async function putProject(project: SimpleProject) {
       L: functional.sections,
     },
     createdOn: {
-      N: createdOn,
+      N: `${createdOn}`,
     },
   });
 }

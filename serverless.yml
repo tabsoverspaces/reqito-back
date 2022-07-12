@@ -46,6 +46,11 @@ provider:
           Action: 'dynamodb:GetItem'
         - Effect: "Allow"
           Resource: arn:aws:dynamodb:eu-west-2:229169632553:table/ReqitoUsers
+          Action: 
+            - 'dynamodb:PutItem'
+            - 'dynamodb:UpdateItem'
+        - Effect: "Allow"
+          Resource: arn:aws:dynamodb:eu-west-2:229169632553:table/ReqitoProjects
           Action: 'dynamodb:PutItem'
 
 

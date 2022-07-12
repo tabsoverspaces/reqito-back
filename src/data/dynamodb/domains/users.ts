@@ -2,9 +2,14 @@ import { getItem } from "../core/get";
 import { putItem } from "../core/put";
 
 import { SimpleUser } from "../../../types/core";
+import { updateItem } from "../core/update";
+
+const usersTableName = "ReqitoUsers";
 
 async function getUser(email: string) {
-  const response = await getItem("ReqitoUsers", "Email", email);
+  console.log(`[data/dynamodb/users] Retrieving user ${email}.`);
+
+  const response = await getItem(usersTableName, "Email", email);
 
   if (response) {
     return {
@@ -16,7 +21,7 @@ async function getUser(email: string) {
 }
 
 async function putUser(user: SimpleUser) {
-  return putItem("ReqitoUsers", {
+  return putItem(usersTableName, {
     uuid: {
       S: user.uuid,
     },
@@ -29,7 +34,19 @@ async function putUser(user: SimpleUser) {
   });
 }
 
+async function updateUserProjects(userEmail: string, newProjects: string[]) {
+  return updateItem(
+    usersTableName,
+    { Email: userEmail },
+    "set ProjectUuids = :p",
+    {
+      ":p": newProjects,
+    }
+  );
+}
+
 export const UsersDynamoAPI = {
   getUser,
   putUser,
+  updateUserProjects,
 };

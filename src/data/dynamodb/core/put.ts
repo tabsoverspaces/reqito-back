@@ -7,9 +7,19 @@ export async function putItem(tableName: string, item: any) {
     Item: item,
   };
 
+  console.log(
+    `[data/dynamodb/core/put] Inserting ${JSON.stringify(
+      item
+    )} into ${tableName} `
+  );
+
   try {
     const data = await ddbClient.send(new PutItemCommand(putParams));
-    console.log(data);
+
+    console.log(
+      `[data/dynamodb/core/put] Insert result ${JSON.stringify(data)}`
+    );
+
     return { data };
   } catch (error: any) {
     console.error(
