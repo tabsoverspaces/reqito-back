@@ -10,10 +10,11 @@ async function getProject(uuid: string) {
 
   if (response) {
     return {
-      uuid: response.uuid.S as string,
-      userOwner: response.userOwner.S as string,
+      uuid: response.Uuid.S as string,
+      userOwner: response.UserOwner.S as string,
       name: response.name.S as string,
       createdOn: response.createdOn.N,
+      functional: { sections: [] }, // TODO add proper items in array
     };
   }
 }

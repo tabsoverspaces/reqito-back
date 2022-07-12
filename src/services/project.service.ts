@@ -18,7 +18,7 @@ async function getProjects(ownerEmail: string) {
     return { error: "User not found." };
   }
 
-  var projectUuids: string[] = (user as SimpleUser).projectUuids;
+  var projectUuids: string[] = user.projectUuids.map((e: { S: string }) => e.S);
 
   if (!projectUuids) {
     console.error(
