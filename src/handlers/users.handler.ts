@@ -1,7 +1,7 @@
 import { validateToken } from "../api/auth";
-import { getUser } from "../data/domains/users";
 import { UserService } from "../services/users.service";
 import { buildResponse } from "./handler.utils";
+import { UsersDynamoAPI } from "../data/dynamodb/domains/users";
 
 export async function createUser(event: any, context: any, callback: any) {
   const { email } = event.body;
@@ -28,7 +28,7 @@ export async function createUser(event: any, context: any, callback: any) {
   }
 
   // validate user does not have an account exising already
-  const userAlreadyExists = await getUser(email);
+  const userAlreadyExists = await UsersDynamoAPI.getUser(email);
 
   if (userAlreadyExists) {
     console.log(

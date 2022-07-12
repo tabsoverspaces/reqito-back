@@ -1,5 +1,5 @@
 import { GetObjectCommand } from "@aws-sdk/client-s3";
-import { s3Client } from "../../libs/S3Client";
+import { s3Client } from "../../../libs/S3Client";
 
 export async function getObject(bucketName: string, objKey: string) {
   const getParams = {

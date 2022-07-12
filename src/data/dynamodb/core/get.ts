@@ -1,5 +1,5 @@
 import { GetItemCommand } from "@aws-sdk/client-dynamodb";
-import { ddbClient } from "../../libs/ddbClient.js";
+import { ddbClient } from "../../../libs/ddbClient";
 
 export async function getItem(
   tableName: string,
@@ -18,6 +18,5 @@ export async function getItem(
   );
 
   const data = await ddbClient.send(new GetItemCommand(getParams));
-  console.log("Success", data.Item);
   return data.Item;
 }

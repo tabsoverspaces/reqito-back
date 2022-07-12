@@ -61,6 +61,24 @@ functions:
           integration: lambda
 
 
+# # Projects
+  getProjects:
+    handler: handler.getProjects
+    events:
+      - http:
+          path: project/list
+          method: get
+          cors: true
+          integration: lambda
+
+  createProject:
+    handler: handler.createProject
+    events:
+      - http:
+          path: project/create
+          method: post
+          cors: true
+          integration: lambda
 package:
   patterns:
     - '!.serverless/**'

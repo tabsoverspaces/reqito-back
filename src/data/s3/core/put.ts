@@ -1,5 +1,5 @@
 import { PutObjectCommand } from "@aws-sdk/client-s3";
-import { s3Client } from "../../libs/S3Client";
+import { s3Client } from "../../../libs/S3Client";
 
 export async function putObject(
   bucketName: string,
