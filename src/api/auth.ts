@@ -2,7 +2,14 @@ import axios from "axios";
 
 const { reqitoAuthUrl } = process.env;
 
-export async function validateToken(token: string) {
+interface TokenValidationResponse {
+  errorMessage?: string;
+  body?: string;
+}
+
+export async function validateToken(
+  token: string
+): Promise<TokenValidationResponse> {
   const result = await axios({
     method: "post",
     url: `${reqitoAuthUrl}/validateToken`,

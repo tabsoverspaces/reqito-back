@@ -12,6 +12,11 @@ export async function getProjects(event: any, context: any, callback: any) {
     return;
   }
 
+  if (!validToken.body) {
+    callback("Token validation failed.");
+    return;
+  }
+
   const { email } = JSON.parse(validToken.body).payload;
 
   console.log(
@@ -31,6 +36,11 @@ export async function createProject(event: any, context: any, callback: any) {
 
   if (validToken.errorMessage) {
     callback(validToken.errorMessage);
+    return;
+  }
+
+  if (!validToken.body) {
+    callback("Token validation failed.");
     return;
   }
 
