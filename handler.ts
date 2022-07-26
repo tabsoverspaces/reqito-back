@@ -1,4 +1,7 @@
 import * as userHandler from "./src/handlers/users.handler";
-import * as projectsHandler from "./src/handlers/projects.handler";
+import * as userDataHandler from "./src/handlers/userData.handler";
 
-module.exports = { ...userHandler, ...projectsHandler };
+module.exports = {
+  ...userHandler,
+  ...userDataHandler,
+};

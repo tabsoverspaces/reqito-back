@@ -1,6 +1,7 @@
 import { DeleteItemCommand } from "@aws-sdk/client-dynamodb";
 import { ddbClient } from "../../../libs/ddbClient.js";
 
+// TODO
 export async function deleteItem(tableName: string, key: any) {
   const deleteParams = {
     TableName: tableName,

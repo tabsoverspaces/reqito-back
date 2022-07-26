@@ -1,4 +1,8 @@
-import { validateToken } from "../api/auth";
+import {
+  validateToken,
+  TokenValidationFailed,
+  TokenValidationSuccessful,
+} from "../api/auth";
 import { UserService } from "../services/users.service";
 import { buildResponse } from "./handler.utils";
 import { UsersDynamoAPI } from "../data/dynamodb/domains/users";
@@ -9,17 +13,21 @@ export async function createUser(event: any, context: any, callback: any) {
 
   console.log(`[users/handler/createUser] Creating user ${email}`);
 
-  const validToken = await validateToken(token);
+  const tokenValidation = await validateToken(token);
 
-  if (validToken.errorMessage) {
-    callback(validToken.errorMessage);
+  if ((tokenValidation as any).error) {
+    callback((tokenValidation as TokenValidationFailed).error);
     return;
   }
 
+  const { email: validatedEmail } =
+    tokenValidation as TokenValidationSuccessful;
+
   console.log(
-    `[users/handler/createUser] Token validated: ${JSON.stringify(validToken)}`
+    `[users/handler/createUser] Token validated: ${JSON.stringify(
+      tokenValidation
+    )}`
   );
-  const validatedEmail = JSON.parse(validToken.body).payload.email;
 
   // validate user can create his own account
   if (validatedEmail !== email) {

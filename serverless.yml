@@ -36,8 +36,9 @@ provider:
   name: aws
   runtime: nodejs14.x
   region: 'eu-west-2'
+  stage: ${opt:stage, 'dev'}
   environment:
-    reqitoAuthUrl: "https://h5st66ond5.execute-api.eu-west-2.amazonaws.com/dev"
+    reqitoAuthUrl: "https://h5st66ond5.execute-api.eu-west-2.amazonaws.com/${self:provider.stage}"
   iam:
     role:
       statements:
@@ -52,6 +53,18 @@ provider:
           Action: 
             - 'dynamodb:GetItem'
             - 'dynamodb:PutItem'
+        - Effect: "Allow"
+          Resource: arn:aws:s3:::reqito-user-data/*
+          Action: 
+            - 's3:GetObject'
+            - 's3:PutObject'
+            - 's3:ListBucket'
+        - Effect: "Allow"
+          Resource: arn:aws:s3:::reqito-user-data
+          Action: 
+            - 's3:GetObject'
+            - 's3:PutObject'
+            - 's3:ListBucket'
 
 
 functions:
@@ -65,25 +78,25 @@ functions:
           cors: true
           integration: lambda
 
-
-# # Projects
-  getProjects:
-    handler: handler.getProjects
+# # User data
+  storeUserData:
+    handler: handler.storeUserData
     events:
       - http:
-          path: project/list
-          method: get
-          cors: true
-          integration: lambda
-
-  createProject:
-    handler: handler.createProject
-    events:
-      - http:
-          path: project/create
+          path: userdata/store
           method: post
           cors: true
           integration: lambda
+
+  getUserData:
+    handler: handler.getUserData
+    events:
+      - http:
+          path: userdata/get
+          method: get
+          cors: true
+          integration: lambda
+          
 package:
   patterns:
     - '!.serverless/**'
